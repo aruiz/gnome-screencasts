@@ -1,0 +1,166 @@
+[01]
+Hello, and welcome to the Gtk+ kick-start tutorial for Vala. We are going to learn how to write a basic desktop application using the Vala language.
+
+[02]
+Let's get familiar with vala writing a command line application first. [GEDIT HelloWorld.vala]
+
+[03]
+This is the smallest program we can have in Vala, it contains the declaration for the main function
+with the command line arguments list as a parameter and finally returns 1 as the program status code.
+
+[04]
+Now we are going to compile it using the valac command line tool.
+We take the vala file as the argument and it will generate an executable file with the same prefix. [TERMINAL]
+
+$ valac HelloWorld.vala
+
+[05]
+Let's do something more interesting, like... a proper Hello World! output. [GEDIT]
+To write strings to the console, we can use the printf method of the standard output global object.
+
+[06]
+Now we can compile and run it to check if it works.
+
+[07]
+Cool! Now that we know the basics, we can start writing our first desktop application
+with Gtk+.
+
+[08]
+We are going to create an empty file and declare a class that inherits from Gtk.Window
+inside the ValaTutorial namespace, this will serve as a base for our new application UI.
+
+[09]
+We add an empty constructor and create the main function as a static member of the class.
+
+[10]
+The main function will initialize the Gtk+ library
+
+[11]
+Then it will create an instance of our custom window class. that will make all of its children visible through the show_all method,
+
+[12]
+And finally it will start the Gtk+ main loop that will run our application.
+
+[13]
+To link against the Gtk+ libraries we need to specify that we are using the
+gtk+-2.0 package through the --pkg option of the vala compiler command.
+
+[14]
+Now we can run our program, as you can see a Window is now shown after running it.
+
+[15]
+However notice that the program does not exit to the command line even if we close the Window.
+
+[16]
+The reason is that we are missing an event handler for the destroy signal,
+this signal is emitted from the Window object when the user clicks on the close button.
+
+[17]
+We are going to connect the Gtk main_quit method with the destroy signal as its handler,
+this will stop the gtk main loop and prevent our application from running after we close its main window.
+
+[18]
+Now we are going to create a Button object with the label "Click me!"
+and then add it to the main window through its add method.
+
+[19]
+Obviously clicking the button won't have any effect.
+
+[20]
+We are going to create an event hlander for the clicked event of the Button class,
+we can check for the handler prototypes for other signals in the valadoc.org website.
+
+[21]
+This handler will print a string to the standard output every time
+the button is pressed.
+
+[22]
+Congratulations you've learned the basics of UI application development with Gtk+ using Vala.
+
+[23]
+Don't forget to visit to the gtk and vala websites for more information and tutorials.
+Thank you for watching.
+
+/*
+				//Vala is a C# based language for GObject. GObject is an object oriented system
+				//for C used by libraries like Gtk+, GStreamer and the GNOME Desktop.
+				//The Vala compiler translates Vala sources to C which are then compiled by a
+				//standard C compiler.
+
+				Remember that the Vala compiler is translating this sources to C.
+
+				Using the -C flag we can actually ask the compiler to just generate
+				the C output from the vala sources and not compile them automatically.
+
+				[TERMINAL]
+
+				$ valac -C HelloWorld
+				$ gedit HelloWorld.c HelloWorld.h
+
+				[GEDIT]
+				This is the generated output. as you see, is just plain C,
+				[SELECT THE HEADER, SWITCH FROM .C TO .H, SELECT GLIB.H]
+				Using the GLib type system.
+
+				[TERMINAL]
+				$ CTRL+L (Clear terminal)
+*/
+--------------------------------------------------------------------------------
+GUI
+------------------------------------------------------------------------------
+
+First thing we need to do, is to import the Gtk+ library. For those unfamiliar
+with .NET, C# has the notion of namespaces. This namespaces are a way to arrange
+code better, so that you can have several classes with the same name.
+
+[GEDIT: new file GtkHelloWorld.vala]
+To import the Gtk+ library we have to use the Gtk namespace. [GEDIT using Gtk]
+
+We will now create our own namespace called ValaTutorial. 
+
+namespace ValaTutorial
+{
+ ...
+}
+
+
+We are ready now to create our own class, let's call it HelloWorld.
+
+  class HelloWorld
+  {
+  }
+
+As we noticed earlier, Vala is not fully compatible with C#, one example is how constructors are declared in GObject. GObject classes have to have a main constructor. We will declare this main constructor with the construct keyword with no parameters.
+
+  class HelloWorld : Object
+  {
+    construct
+    {
+      
+    }
+  }
+
+
+Let's create a new Window
+
+  class HelloWorld : Object
+  {
+    construct
+    {
+
+      var window = new Gtk.Window (Gtk.WindowType.TOPLEVEL);
+
+.............
+We create a new variable using var, this var keyword allows us to create
+new objects without having to care about their type. Of course, you can
+declare the type if you want, but Vala can do this for you instead.
+
+In this case, we are creating new Gtk.Window object, the 
+.............
+
+    }
+  }
+  
+  
+  
+We need to add now the entry point for our application, this would be the static method main, in C# and Vala...
